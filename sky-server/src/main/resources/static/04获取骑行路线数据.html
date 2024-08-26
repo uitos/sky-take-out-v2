@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <!--高德提供的安全秘钥-->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: "394e459f5aa9977ba150155640a7d0ff",
+        }
+    </script>
+    <title>位置经纬度 + 获取骑行规划数据</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <script src="https://webapi.amap.com/maps?v=2.0&key=41804d27a2b546f88d24d55332a5c799&plugin=AMap.Riding"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<div id="panel"></div>
+<script type="text/javascript">
+    var map = new AMap.Map("container", {
+        center: [116.397559, 39.89621],
+        zoom: 14
+    });
+
+    var ridingOption = {
+        map: map,
+        panel: "panel",
+        policy: 1,
+        hideMarkers: false,
+        isOutline: true,
+        outlineColor: '#ffeeee',
+        autoFitView: true
+    }
+
+    var riding = new AMap.Riding(ridingOption)
+
+    //根据起终点坐标规划骑行路线
+    riding.search([116.397933,39.844818],[116.440655,39.878694], function(status, result) {
+        // result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_RidingResult
+        if (status === 'complete') {
+            console.info(result)
+           result.routes[0].rides.forEach(item=>{
+               alert(item.start_location)
+           })
+            log.success('骑行路线数据查询成功')
+        } else {
+            log.error('骑行路线数据查询失败' + result)
+        }
+    });
+
+</script>
+</body>
+</html>

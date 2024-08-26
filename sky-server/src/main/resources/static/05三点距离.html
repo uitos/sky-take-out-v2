@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>三点距离</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <style>
+        html,body,#container{
+            height:100%;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<div class='info' style='min-width:15rem;'>可拖动Marker调整位置</div>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=41804d27a2b546f88d24d55332a5c799"></script>
+<script type="text/javascript">
+    //初始化地图对象，加载地图
+    var map = new AMap.Map("container", {
+        resizeEnable: true,
+        zoom: 13
+    });
+    var m1 = new AMap.Marker({
+        map: map,
+        draggable:true,
+        position: new AMap.LngLat(116.368904, 39.923423)
+    });
+    var m2 = new AMap.Marker({
+        map: map,
+        draggable:true,
+        position:new AMap.LngLat(116.387271, 39.922501)
+    });
+
+    var m3 = new AMap.Marker({
+        map: map,
+        draggable:true,
+        position:new AMap.LngLat(116.381772,39.927148)
+    });
+
+    m1.setLabel({
+        offset: new AMap.Pixel(1, -5), //设置文本标注偏移量
+        content: "<div style='color: blue'>骑手位置</div>", //设置文本标注内容
+        direction: 'top' //设置文本标注方位
+    });
+
+    m2.setLabel({
+        offset: new AMap.Pixel(1, -5), //设置文本标注偏移量
+        content: "<div style='color: blue'>用户地址</div>", //设置文本标注内容
+        direction: 'top' //设置文本标注方位
+    });
+
+    m3.setLabel({
+        offset: new AMap.Pixel(1, -5), //设置文本标注偏移量
+        content: "<div style='color: blue'>商家地址</div>", //设置文本标注内容
+        direction: 'top' //设置文本标注方位
+    });
+
+
+    map.setFitView();
+
+    var line = new AMap.Polyline({
+        strokeColor:'#80d8ff',
+        isOutline:true,
+        outlineColor:'white'
+    });
+    var line1 = new AMap.Polyline({
+        strokeColor:'#80d8ff',
+        isOutline:true,
+        outlineColor:'white'
+    });
+    line.setMap(map);
+    line1.setMap(map);
+    var text = new AMap.Text({
+        text:'xxxx',
+        style:{'background-color':'#29b6f6',
+            'border-color':'#e1f5fe',
+            'font-size':'12px'}
+    });
+    var text1 = new AMap.Text({
+        text1:'yyyy',
+        style:{'background-color':'#29b6f6',
+            'border-color':'#e1f5fe',
+            'font-size':'12px'}
+    });
+    text.setMap(map);
+    text1.setMap(map);
+
+    function computeDis(){
+        var p1 = m1.getPosition();
+        var p2 = m2.getPosition();
+        var textPos = p1.divideBy(2).add(p2.divideBy(2));
+        var distance = Math.round(p1.distance(p2));
+        var path = [p1,p2];
+        line.setPath(path);
+        text.setText('间隔'+distance+'米')
+        text.setPosition(textPos)
+    }
+    function computeDis1(){
+        var p1 = m1.getPosition();
+        var p3 = m3.getPosition();
+        var textPos1 = p1.divideBy(2).add(p3.divideBy(2));
+        var distance1 = Math.round(p1.distance(p3));
+        var path1 = [p1,p3];
+        line1.setPath(path1);
+        text1.setText('间隔'+distance1+'米')
+        text1.setPosition(textPos1)
+    }
+    computeDis();
+    computeDis1();
+    // m1.on('dragging', computeDis)
+    // m2.on('dragging', computeDis)
+</script>
+</body>
+</html>

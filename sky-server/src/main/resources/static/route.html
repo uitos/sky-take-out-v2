@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>骑手路线规划</title>
+    <style type="text/css">
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+        #panel {
+            position: fixed;
+            background-color: white;
+            max-height: 90%;
+            overflow-y: auto;
+            top: 10px;
+            right: 10px;
+            width: 280px;
+        }
+        #panel .amap-lib-driving {
+            border-radius: 4px;
+            overflow: hidden;
+        }
+    </style>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <!--高德提供的安全秘钥-->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: "394e459f5aa9977ba150155640a7d0ff",
+        }
+    </script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=41804d27a2b546f88d24d55332a5c799&plugin=AMap.Riding"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<div id="panel"></div>
+<script type="text/javascript">
+    var map = new AMap.Map("container", {
+        resizeEnable: true,
+        center: [116.343982,40.060585],//地图中心点:北京昌平传智教育总部
+        zoom: 13 //地图显示的缩放级别
+    });
+    //骑行导航
+    var riding = new AMap.Riding({
+        map: map
+        // panel: "panel"      //  不显示具体路线详情
+    });
+
+</script>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/getParameter.js"></script>
+<script>
+      var  tradeNo = getParameter("tradeNo");
+      var  expire = getParameter("expire");
+      $.get("/dispatch/loadRouteInfo?tradeNo="+tradeNo+"&expire="+expire,function (res) {
+          if(res.code==0){
+              $("#container").html("<h2>订单已经送达!</h2>")
+          }else{
+              var userLngLat = res.data.split("_")[0];
+              var shopLngLat = res.data.split("_")[1];
+              var userarry  = [parseFloat(userLngLat.split(",")[0]),parseFloat(userLngLat.split(",")[1])];
+              var shoparry  = [parseFloat(shopLngLat.split(",")[0]),parseFloat(shopLngLat.split(",")[1])];
+              //根据起终点坐标规划骑行路线
+              riding.search(userarry,shoparry, function(status, result) {
+                  // result即是对应的骑行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_RidingResult
+                  if (status === 'complete') {
+                      log.success('绘制骑行路线完成')
+                  } else {
+                      log.error('骑行路线数据查询失败' + result)
+                  }
+              });
+          }
+      })
+</script>
+
+</body>
+<!--<script>-->
+     <!--// websocket     链接配置-->
+        <!--if(typeof(WebSocket) == "undefined") {-->
+            <!--console.log("您的浏览器不支持WebSocket");-->
+        <!--}else{-->
+            <!--console.log("您的浏览器支持WebSocket");-->
+            <!--//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接-->
+            <!--//等同于socket = new WebSocket("ws://localhost:8888/xxxx");-->
+            <!--var socketUrl="ws://localhost:8081/ws/route_"+Math.random().toString(36).substr(2);;-->
+            <!--console.log(socketUrl);-->
+            <!--if(socket!=null){-->
+                <!--socket.close();-->
+                <!--socket=null;-->
+            <!--}-->
+            <!--var socket = new WebSocket(socketUrl);-->
+            <!--//打开事件-->
+            <!--socket.onopen = function() {-->
+                <!--console.log("websocket已打开");-->
+            <!--};-->
+            <!--//获得消息事件-->
+            <!--socket.onmessage = function(msg) {-->
+                <!--console.log(msg.data);-->
+            <!--};-->
+            <!--//关闭事件-->
+            <!--socket.onclose = function() {-->
+                <!--console.log("websocket已关闭");-->
+            <!--};-->
+            <!--//发生了错误事件-->
+            <!--socket.onerror = function() {-->
+                <!--console.log("websocket发生了错误");-->
+            <!--}-->
+        <!--}-->
+
+    <!--function sclose() {-->
+        <!--socket.close();-->
+    <!--}-->
+
+<!--</script>-->
+</html>
