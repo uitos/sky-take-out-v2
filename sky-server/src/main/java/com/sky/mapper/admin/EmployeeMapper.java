@@ -17,4 +17,5 @@ public interface EmployeeMapper {
     Employee getByUsername(String username);
 
 
-    }
+    int insert(Employee employee);
+}
