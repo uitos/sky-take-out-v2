@@ -42,8 +42,8 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
 
@@ -64,7 +64,7 @@
 
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <artifactId>druid-spring-boot-3-starter</artifactId>
         </dependency>
 
         <dependency>

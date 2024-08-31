@@ -21,7 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 
 @Service
