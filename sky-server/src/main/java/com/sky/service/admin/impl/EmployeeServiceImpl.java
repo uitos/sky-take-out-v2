@@ -1,23 +1,27 @@
 package com.sky.service.admin.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
-import com.sky.exception.AccountLockedException;
-import com.sky.exception.AccountNotFoundException;
-import com.sky.exception.EmployeeNameExistException;
-import com.sky.exception.PasswordErrorException;
+import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.exception.*;
 import com.sky.mapper.admin.EmployeeMapper;
 import com.sky.pojo.Employee;
+import com.sky.result.PageResult;
 import com.sky.service.admin.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -80,6 +84,30 @@ public class EmployeeServiceImpl  implements EmployeeService {
         }
         employee.setPassword(PasswordConstant.DEFAULT_PASSWORD);
         int empRows = employeeMapper.insert(employee);
+    }
+
+    /**
+     * 分页查询
+     * @param dto
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO dto) {
+        //查询名称为空
+        if (Objects.nonNull(dto.getName())&&dto.getName().isBlank()){
+            //未找到相关员工
+            throw new EmployeeException(MessageConstant.EMPLOYEE_NOT_FOUND);
+        }
+        Page<Object> page = PageHelper.startPage(dto.getPage(), dto.getPageSize());
+        String name = dto.getName();
+        if (Objects.nonNull(dto.getName())&&dto.getName().isBlank()){
+            //删除所有前导和尾随空格
+            String trimName = name.trim();
+            dto.setName(trimName);
+        }
+
+        List<Employee> list =  employeeMapper.pageQuery(dto);
+        return new PageResult(page.getTotal(),list);
     }
 
 

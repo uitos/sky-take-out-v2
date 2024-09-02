@@ -8,4 +8,13 @@
         values(#{name},#{username},#{password},#{phone},#{sex},#{idNumber}
               ,#{status},#{createTime},#{createUser},#{updateTime},#{updateUser})
     </insert>
+    <select id="pageQuery" resultType="com.sky.pojo.Employee">
+        select * from employee
+
+        <where>
+            <if test="name!=null and !name.isBlank()">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
 </mapper>

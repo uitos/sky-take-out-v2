@@ -30,4 +30,5 @@ public class MessageConstant {
     public static final String TRADE_COMPLETE_CANCLE_EXCEPTION = "当前运单状态必须：已完成或取消状态";
 
     public static final String EMPLOYEE_USERNAME_EXISTS = "用户名已存在";
+    public static final String EMPLOYEE_NOT_FOUND = "未找到相关员工";
 }
