@@ -29,4 +29,5 @@ public class MessageConstant {
     public static final String ORDER_STATUS_TOBE_OUT= "当前订单已出餐";
     public static final String TRADE_COMPLETE_CANCLE_EXCEPTION = "当前运单状态必须：已完成或取消状态";
 
+    public static final String EMPLOYEE_USERNAME_EXISTS = "用户名已存在";
 }

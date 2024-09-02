@@ -12,12 +12,12 @@ public class EmployeeDTO implements Serializable {
 
     private Long id;
     @NotNull
-    @Length(min = 3, max = 20,message = "账号输入不符，请输入3-20个字符")
+    @Length(min = 3, max = 20,message = "账号输入不符,请输入3-20个字符")
     private String username;
     @NotNull
     //汉字、字母大小写
-    @Length(min = 1, max = 12,message = "员工姓名输入不符，请输入1-12个字符")
-    @Pattern(regexp = "^[\u4e00-\u9fa5A-Za-z]+$",message = "员工姓名输入不符，请输入汉字、字母")
+    @Length(min = 1, max = 12,message = "员工姓名输入不符,请输入1-12个字符")
+    @Pattern(regexp = "^[\u4e00-\u9fa5A-Za-z]+$",message = "员工姓名输入不符,请输入汉字、字母")
     private String name;
     @NotNull
     @Length(min = 11, max = 11,message = "请输入正确的手机号")

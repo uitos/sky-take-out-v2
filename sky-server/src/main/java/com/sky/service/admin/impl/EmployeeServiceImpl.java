@@ -8,6 +8,7 @@ import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.EmployeeNameExistException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.admin.EmployeeMapper;
 import com.sky.pojo.Employee;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 public class EmployeeServiceImpl  implements EmployeeService {
@@ -72,6 +74,10 @@ public class EmployeeServiceImpl  implements EmployeeService {
         employee.setCreateUser(BaseContext.getCurrentId());
         employee.setUpdateUser(BaseContext.getCurrentId());
         employee.setStatus(1);
+        Employee emp = employeeMapper.getByUsername(employee.getUsername());
+        if(Objects.nonNull(emp)){
+            throw new EmployeeNameExistException(MessageConstant.EMPLOYEE_USERNAME_EXISTS);
+        }
         employee.setPassword(PasswordConstant.DEFAULT_PASSWORD);
         int empRows = employeeMapper.insert(employee);
     }
