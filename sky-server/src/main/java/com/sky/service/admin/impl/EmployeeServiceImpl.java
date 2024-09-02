@@ -73,7 +73,7 @@ public class EmployeeServiceImpl  implements EmployeeService {
         employee.setUpdateTime(LocalDateTime.now());
         employee.setCreateUser(BaseContext.getCurrentId());
         employee.setUpdateUser(BaseContext.getCurrentId());
-        employee.setStatus(1);
+        employee.setStatus(StatusConstant.ENABLE);
         Employee emp = employeeMapper.getByUsername(employee.getUsername());
         if(Objects.nonNull(emp)){
             throw new EmployeeNameExistException(MessageConstant.EMPLOYEE_USERNAME_EXISTS);
